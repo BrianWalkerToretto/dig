@@ -9,7 +9,7 @@ const Dig = function(url, data = {}) {
 
 Dig.prototype = {
   constructor: Dig,
-  version: '0.0.1',
+  version: 'default',
   init: function(url, props) {
     // 'autotrack': true, // 是否打开全埋点监测
     this.url = url;
@@ -69,10 +69,10 @@ Dig.prototype = {
       redirectCount
     } = performance.navigation;
     const {
-      usedJSHeapSize, // JS 对象（包括V8引擎内部对象）占用的内存，一定小于 totalJSHeapSize，否则可能出现内存泄漏
-      totalJSHeapSize, // 可使用的内存
-      jsHeapSizeLimit // 内存大小限制
-    } = performance.memory;
+      usedJSHeapSize = 0, // JS 对象（包括V8引擎内部对象）占用的内存，一定小于 totalJSHeapSize，否则可能出现内存泄漏
+      totalJSHeapSize = 0, // 可使用的内存
+      jsHeapSizeLimit = 0 // 内存大小限制
+    } = performance.memory || {};
     return JSON.stringify({
       dns, tcp, req, parse, white, ready, load, redirect, // timing
       resourceCount, // getEntries

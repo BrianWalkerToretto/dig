@@ -4,15 +4,27 @@ import webpack from 'webpack';
 import WebpackCommonConfig, { resolve } from './common.config';
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const merge = require('webpack-merge');
-// const nodeExternals  = require('webpack-node-externals');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const version = require('../package.json').version;
 
 module.exports = merge(WebpackCommonConfig, {
+  module: {
+    rules: [
+      {
+        test: /dig\.js$/,
+        loader: 'string-replace-loader',
+        options: {
+          search: "version: 'default'",
+          replace: `version: '${version}'`,
+        }
+      }
+    ]
+  },
   plugins: [
     new UglifyJSPlugin({
       exclude: /\.min\.js$/, // 过滤掉以".min.js"结尾的文件，我们认为这个后缀本身就是已经压缩好的代码，没必要进行二次压缩
       uglifyOptions: {
-        ie8: false,
+        ie8: true, // 支持ie8
         ecma: 8,
         mangle: true,
         compress: {
@@ -37,7 +49,7 @@ module.exports = merge(WebpackCommonConfig, {
       sourceMap: true,
       cache: true,
       parallel: os.cpus().length
-  }),
+    }),
     //根据模块相对路径生成四位数hash值作为模块id
     new webpack.HashedModuleIdsPlugin(),
     new LodashModuleReplacementPlugin(),
