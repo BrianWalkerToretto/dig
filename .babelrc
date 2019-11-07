@@ -1,0 +1,48 @@
+// .babelrc
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "browsers": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all",
+            "last 2 versions",
+            "ie >= 9",
+            "iOS >= 8",
+            "Android >= 4"
+          ]
+        },
+        "modules": false,
+        "useBuiltIns": "entry", // usage
+        "corejs": 3,
+        "debug": false, // 是否输出启用的plugins列表
+        "spec": false, // 是否允许more spec compliant，但可能转译出的代码更慢
+        "loose": true, // 是否允许生成更简单es5的代码，但可能不那么完全符合ES6语义
+        "include": [], // 总是启用的 plugins
+        "exclude": [],  // 强制不启用的 plugins
+        "forceAllTransforms": false // 强制使用所有的plugins，用于只能支持ES5的uglify可以正确压缩代码
+      }
+    ]
+  ],
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    [
+      // @babel/plugin-transform-runtime: 避免 polyfill 污染全局变量，减小打包体积
+      "@babel/plugin-transform-runtime",
+      {
+        // "polyfill": false,
+        "absoluteRuntime": false,
+        "corejs": 3, // 对应 @babel/runtime-corejs@3，需要填3
+        "helpers": false,
+        "regenerator": true,
+        "useESModules": false
+      }
+    ],
+    ["@babel/plugin-syntax-dynamic-import"],
+    ["@babel/plugin-transform-arrow-functions", { "spec": false }],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }]
+  ]
+}

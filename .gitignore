@@ -1,0 +1,12 @@
+# dependencies
+node_modules/
+package-lock.json
+src/animate/
+*.bat
+*.map
+
+# misc
+.DS_Store
+
+# Editor directories and files
+.vscode
