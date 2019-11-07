@@ -21,35 +21,6 @@ module.exports = merge(WebpackCommonConfig, {
     ]
   },
   plugins: [
-    new UglifyJSPlugin({
-      exclude: /\.min\.js$/, // 过滤掉以".min.js"结尾的文件，我们认为这个后缀本身就是已经压缩好的代码，没必要进行二次压缩
-      uglifyOptions: {
-        ie8: true, // 支持ie8
-        ecma: 8,
-        mangle: true,
-        compress: {
-          // 在UglifyJs删除没有用到的代码时不输出警告
-          // warnings: false,
-          // 删除所有的 `console` 语句，可以兼容ie浏览器
-          drop_console: true,
-          // 内嵌定义了但是只用到一次的变量
-          collapse_vars: true,
-          // 提取出出现多次但是没有定义成变量去引用的静态值
-          reduce_vars: true,
-          pure_funcs: ['console.log']
-        },
-        output: {
-          // 最紧凑的输出
-          beautify: false,
-          // 删除所有的注释
-          comments: false,
-        }
-      },
-      extractComments: false, // 移除注释
-      sourceMap: true,
-      cache: true,
-      parallel: os.cpus().length
-    }),
     //根据模块相对路径生成四位数hash值作为模块id
     new webpack.HashedModuleIdsPlugin(),
     new LodashModuleReplacementPlugin(),
@@ -71,6 +42,44 @@ module.exports = merge(WebpackCommonConfig, {
     concatenateModules: true, //  webpack 4
     usedExports: true,
     minimize: true,
+    minimizer: [
+      new UglifyJSPlugin({
+        exclude: /\.min\.js$/, // 过滤掉以".min.js"结尾的文件，我们认为这个后缀本身就是已经压缩好的代码，没必要进行二次压缩
+        uglifyOptions: {
+          warnings: false,
+          parse: {},
+          toplevel: false,
+          nameCache: null,
+          keep_fnames: false,
+          ie8: true, // 支持ie8
+          ecma: 8,
+          mangle: true,
+          compress: {
+            properties: true,
+            // 在UglifyJs删除没有用到的代码时不输出警告
+            // warnings: false,
+            // 删除所有的 `console` 语句，可以兼容ie浏览器
+            drop_console: true,
+            // 内嵌定义了但是只用到一次的变量
+            collapse_vars: true,
+            // 提取出出现多次但是没有定义成变量去引用的静态值
+            reduce_vars: true,
+            pure_funcs: ['console.log']
+          },
+          output: {
+            // 最紧凑的输出
+            beautify: false,
+            // 删除所有的注释
+            comments: false,
+            quote_keys: true
+          }
+        },
+        extractComments: false, // 移除注释
+        sourceMap: true,
+        cache: true,
+        parallel: os.cpus().length
+      }),
+    ],
     // minimizer: [new TerserPlugin()]
   }
 });

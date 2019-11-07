@@ -3,4 +3,4 @@ import Dig from './dig';
 export {
   Dig
 };
-// export default Dig;
+export default Dig;
